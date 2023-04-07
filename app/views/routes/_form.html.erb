@@ -1,0 +1,41 @@
+<%= form_with(model: route) do |form| %>
+  <% if route.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(route.errors.count, "error") %> prohibited this route from being saved:</h2>
+
+      <ul>
+        <% route.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="mb-3">
+    <%= form.label :name, "Útvonal neve", class: "form-label" %>
+    <%= form.text_field :name, class: "form-control", placeholder: "Útvonal neve..." %>
+  </div>
+
+  <div class="row">
+    <div class="mb-3 col">
+      <%= form.label :distance, "Hossz (km)", class: "form-label" %>
+      <%= form.number_field :distance, step: :any, class: "form-control", placeholder: "Útvonal hossza..." %>
+    </div>
+    <div class="mb-3 col">
+      <div>
+        <%= form.label :elevation, "Szintemelkedés (m)", class: "form-label" %>
+        <%= form.number_field :elevation, class: "form-control", placeholder: "Szintemelkedés..." %>
+      </div>
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :link, "Link (pl. Strava, Futótérkép.hu, stb...)", class: "form-label" %>
+    <%= form.text_field :link, class: "form-control", placeholder: "Link..." %>
+  </div>
+  <div class="flex">
+    <div class="flex2">
+      <%= form.submit "Mentés", class: "btn btn-success mybtn" %>
+      <%= link_to "Mégse", root_path, class: "btn btn-secondary" %>
+  </div>
+<% end %>

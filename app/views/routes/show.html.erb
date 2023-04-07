@@ -1,0 +1,235 @@
+<p style="color: green"><%= notice %></p>
+
+<div class="flex">
+    <h1 class="myheader"><%= @route.name %></h1>
+    <div class="vert-middle">
+        <%= link_to "Szerkesztés", edit_route_url(@route), class: "btn btn-success large-text" %>
+    </div>
+</div>
+<p>
+    Hossz: <%= @route.distance %> km <br/>
+    Szintemelkedés: <%= @route.elevation %> m <br/>
+    Link: <a class="mylink" rel="noopener noreferrer" target="_blank" href="<%= @route.link %>"><%= @route.link %></a>
+</p>
+<div class="flex">
+    <h2>Teljesítések</h2>
+    <div><button type="button" data-bs-toggle="modal" data-bs-target="#new-effort-modal" onclick="clearModal()" class="btn btn-success large-text">Új teljesítés</a></div>
+</div>
+<div class="row">
+  <div class="col-12 col-lg-4">
+      <h3 class="centered">Túrázva</h3>
+      <% if @hike_efforts.length === 0 %>
+          <p class="centered">Még senki sem teljesítette ezt az útvonalat ilyen módon. Legyél te az első!</p>
+      <%  else %>
+          <table class="table table-striped align-middle">
+              <thead>
+                  <th><i class="fas fa-medal"></i></th>
+                  <th>Név</th>
+                  <th>Idő</th>
+                  <th>Módosítás</th>
+              </thead>
+              <tbody>
+              <% @hike_efforts.each_with_index do |effort, idx| %>
+                <tr>
+                  <td><%= idx + 1%>.</td>
+                  <td><%= effort.name %></td>
+                  <td><%= effort.time %></td>
+                  <td>
+                      <div class="flex2">
+                        <button class="btn btn-warning mybtn white" data-bs-toggle="modal" data-bs-target="#new-effort-modal" onclick="fillModal(this, 0, '<%= effort._id %>')"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-modal" onclick="fillDeleteModal(this, '<%= effort._id %>', '<%= route._id %>')"><i class="fas fa-trash-alt"></i></button>
+                      </div>
+                  </td>
+                </tr>
+              <% end %>
+              </tbody>
+          </table>
+      <% end %>
+  </div>
+  <div class="col-12 col-lg-4">
+      <h3 class="centered">Futva</h3>
+      <% if @run_efforts.length === 0 %>
+          <p class="centered">Még senki sem teljesítette ezt az útvonalat ilyen módon. Legyél te az első!</p>
+      <%  else %>
+          <table class="table table-striped align-middle">
+              <thead>
+                  <th><i class="fas fa-medal"></i></th>
+                  <th>Név</th>
+                  <th>Idő</th>
+                  <th>Módosítás</th>
+              </thead>
+              <tbody>
+              <% @run_efforts.each_with_index do |effort, idx| %>
+                <tr>
+                  <td><%= idx + 1%>.</td>
+                  <td><%= effort.name %></td>
+                  <td><%= effort.time %></td>
+                  <td>
+                      <div class="flex2">
+                        <button class="btn btn-warning mybtn white" data-bs-toggle="modal" data-bs-target="#new-effort-modal" onclick="fillModal(this, 0, '<%= effort._id %>')"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-modal" onclick="fillDeleteModal(this, '<%= effort._id %>', '<%= route._id %>')"><i class="fas fa-trash-alt"></i></button>
+                      </div>
+                  </td>
+                </tr>
+              <% end %>
+              </tbody>
+          </table>
+      <% end %>
+  </div>
+  <div class="col-12 col-lg-4">
+      <h3 class="centered">Kerékpározva</h3>
+      <% if @bike_efforts.length === 0 %>
+          <p class="centered">Még senki sem teljesítette ezt az útvonalat ilyen módon. Legyél te az első!</p>
+      <%  else %>
+          <table class="table table-striped align-middle">
+              <thead>
+                  <th><i class="fas fa-medal"></i></th>
+                  <th>Név</th>
+                  <th>Idő</th>
+                  <th>Módosítás</th>
+              </thead>
+              <tbody>
+              <% @bike_efforts.each_with_index do |effort, idx| %>
+                <tr>
+                  <td><%= idx + 1%>.</td>
+                  <td><%= effort.name %></td>
+                  <td><%= effort.time %></td>
+                  <td>
+                      <div class="flex2">
+                        <button class="btn btn-warning mybtn white" data-bs-toggle="modal" data-bs-target="#new-effort-modal" onclick="fillModal(this, 0, '<%= effort._id %>')"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-modal" onclick="fillDeleteModal(this, '<%= effort._id %>', '<%= route._id %>')"><i class="fas fa-trash-alt"></i></button>
+                      </div>
+                  </td>
+                </tr>
+              <% end %>
+              </tbody>
+          </table>
+      <% end %>
+  </div>
+</div>
+</div>  <!-- closes the container -->
+<!-- New/Edit effort modal -->
+<div class="modal fade" id="new-effort-modal" tabindex="-1" role="dialog" aria-labelledby="new-effort-modalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="alert alert-danger" hidden role="alert" id="errors"></div>
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle"><span id="titlePartOne">Új teljesítés</span> - <%= @route.name %></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="new-effort-form">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Teljesítő neve</label>
+                        <input class="form-control" id="name" name="name" placeholder="Név...">
+                    </div>
+                    <div class="mb-3">
+                        <label for="time" class="form-label">Teljesítés ideje (óó:pp:mm)</label>
+                        <input class="form-control" id="time" name="time" placeholder="Idő...">
+                    </div>
+                    <div class="mb-3">
+                        <label for="type" class="form-label">Teljesítés módja</label>
+                        <select class="form-select" id="type" name="type" >
+                            <option value="0" disabled selected>Válassz sportot...</option>
+                            <option value="1">Túra</option>
+                            <option value="2">Futás</option>
+                            <option value="3">Kerékpározás</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Mégse</button>
+                <button type="button" id="newEditSubmit" class="btn btn-success" data-id="" onclick="onNewEditSubmit('<%= @route.id %>')">Mentés</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function clearModal() {
+    document.getElementById('name').value = '';
+    document.getElementById('time').value = '';
+    document.getElementById('type').selectedIndex = 0   ;
+    document.getElementById('titlePartOne').innerHTML = 'Új teljesítés';
+    document.getElementById('newEditSubmit').dataset.id = '';
+    document.getElementById("errors").innerHTML = '';
+    document.getElementById("errors").setAttribute('hidden', true)
+}
+
+function fillModal(el, mode, id) {
+    document.getElementById("errors").innerHTML = '';
+    document.getElementById("errors").setAttribute('hidden', true)
+    const name = el.parentElement.parentElement.previousElementSibling.previousElementSibling.innerHTML;
+    const time = el.parentElement.parentElement.previousElementSibling.innerHTML;
+    document.getElementById('titlePartOne').innerHTML = 'Teljesítés szerkesztése';
+    document.getElementById('time').value = time;
+    document.getElementById('name').value = name;
+    document.getElementById('type').selectedIndex = mode + 1;
+    document.getElementById('newEditSubmit').dataset.id = id;
+}
+
+function fillDeleteModal(el, effort_id, route_id) {
+    const bodyPrefix = "Biztosan törlöd ezt a teljesítést? "
+    const bodyPostfix = " Ezt később nem tudod visszavonni!"
+    const name = el.parentElement.parentElement.previousElementSibling.previousElementSibling.innerHTML;
+    const time = el.parentElement.parentElement.previousElementSibling.innerHTML;
+    document.getElementById('modal-title').innerHTML = "Teljesítés törlése";
+    document.getElementById('modal-body').innerHTML = bodyPrefix + ` ${name}, ${time}` + bodyPostfix;
+    document.getElementById('deleteSubmit').setAttribute('href', '/routes/' + route_id + '/del-effort/' + effort_id);
+}
+
+function onNewEditSubmit(route_id) {
+  const csrfToken = document.querySelector("[name='csrf-token']").content
+  const id = document.getElementById('newEditSubmit').dataset.id;
+  const name = document.getElementById('name').value
+  const time = document.getElementById('time').value
+  const type = document.getElementById('type').value
+  const formData = JSON.stringify({ name, time, effort_type: parseInt(type), route_id: parseInt(route_id) })
+  if (id) {
+    fetch(`/efforts/${id}`, {
+        method: 'PUT',
+        headers: {
+          'X-CSRF-Token': csrfToken,
+          'Content-Type': 'application/json'
+        },
+        body: formData
+    })
+    .then(resp => resp.json())
+    .then(data => {
+        if (data.errors.length !== 0) {
+            addErrors(data.errors)
+        } else {
+            window.location.reload()
+        }
+    })
+  } else {
+    fetch(`/efforts/`, {
+        method: 'POST',
+        headers: {
+          'X-CSRF-Token': csrfToken,
+          'Content-Type': 'application/json'
+        },
+        body: formData
+    })
+    .then(resp => resp.json())
+    .then(data => {
+        if (data.errors.length !== 0) {
+            addErrors(data.errors)
+        } else {
+            window.location.reload()
+        }
+    })
+  }
+}
+
+function addErrors(errors) {
+    document.getElementById("errors").innerHTML = ''
+    document.getElementById("errors").removeAttribute('hidden')
+    errors.forEach(err => {
+        const myErr = document.createElement('li')
+        myErr.innerHTML = err
+        document.getElementById("errors").appendChild(myErr)
+    })
+}
+</script>
