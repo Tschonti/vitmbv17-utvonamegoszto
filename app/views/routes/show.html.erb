@@ -257,10 +257,12 @@ function onNewEditSubmit(route_id) {
 function addErrors(errors) {
     document.getElementById("errors").innerHTML = ''
     document.getElementById("errors").removeAttribute('hidden')
-    errors.forEach(err => {
+    Object.keys(errors).forEach(field => {
+        errors[field].forEach(err => {
         const myErr = document.createElement('li')
-        myErr.innerHTML = err
+        myErr.innerHTML = field + ' ' + err
         document.getElementById("errors").appendChild(myErr)
+        })
     })
 }
 </script>

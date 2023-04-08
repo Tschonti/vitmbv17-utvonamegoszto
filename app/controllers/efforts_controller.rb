@@ -27,7 +27,7 @@ class EffortsController < ApplicationController
       if @effort.save
         format.json { render json: @effort, status: :created }
       else
-        format.json { render json: @effort.errors, status: :unprocessable_entity }
+        format.json { render json: {errors: @effort.errors}, status: :unprocessable_entity }
       end
     end
   end
@@ -38,7 +38,7 @@ class EffortsController < ApplicationController
       if @effort.update(effort_params)
         format.json { render json: @effort, status: :ok }
       else
-        format.json { render json: @effort.errors, status: :unprocessable_entity }
+        format.json { render json: {errors: @effort.errors}, status: :unprocessable_entity }
       end
     end
   end
