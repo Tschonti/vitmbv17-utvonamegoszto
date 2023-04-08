@@ -25,10 +25,8 @@ class EffortsController < ApplicationController
 
     respond_to do |format|
       if @effort.save
-        format.html { redirect_to effort_url(@effort), notice: "Effort was successfully created." }
-        format.json { render :show, status: :created, location: @effort }
+        format.json { render json: @effort, status: :created }
       else
-        format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @effort.errors, status: :unprocessable_entity }
       end
     end
@@ -38,10 +36,8 @@ class EffortsController < ApplicationController
   def update
     respond_to do |format|
       if @effort.update(effort_params)
-        format.html { redirect_to effort_url(@effort), notice: "Effort was successfully updated." }
-        format.json { render :show, status: :ok, location: @effort }
+        format.json { render json: @effort, status: :ok }
       else
-        format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @effort.errors, status: :unprocessable_entity }
       end
     end
@@ -52,7 +48,6 @@ class EffortsController < ApplicationController
     @effort.destroy
 
     respond_to do |format|
-      format.html { redirect_to efforts_url, notice: "Effort was successfully destroyed." }
       format.json { head :no_content }
     end
   end
@@ -65,6 +60,6 @@ class EffortsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def effort_params
-      params.require(:effort).permit(:name, :time, :type, :route_id)
+      params.require(:effort).permit(:name, :time, :effort_type, :route_id)
     end
 end

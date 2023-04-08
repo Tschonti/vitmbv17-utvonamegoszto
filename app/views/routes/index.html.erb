@@ -1,4 +1,6 @@
-<p style="color: green"><%= notice %></p>
+<% unless notice.nil? %>
+    <div class="alert alert-success" role="alert"><%= notice %></div>
+<% end %>
 
 <div class="flex">
     <h1 class="myheader">Útvonalak listája</h1>
@@ -38,7 +40,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Mégse</button>
-                <a href="<%=`/routes/del/${route.id}`%>" id="deleteSubmit" class="btn btn-danger">Törlés</a>
+                <button type="button" data-id="" onclick="deleteRoute()" id="deleteSubmit" class="btn btn-danger">Törlés</button>
             </div>
         </div>
     </div>
@@ -51,7 +53,20 @@
       const name = el.parentElement.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.firstElementChild.innerHTML;
       document.getElementById('modal-title').innerHTML = titlePrefix + name;
       document.getElementById('modal-body').innerHTML = bodyPrefix + name + bodyPostfix;
-      document.getElementById('deleteSubmit').setAttribute('href', '/routes/del/' + id);
+      document.getElementById("deleteSubmit").dataset.id = id
+    }
+
+    function deleteRoute() {
+        const csrfToken = document.querySelector("[name='csrf-token']").content
+        const id = document.getElementById("deleteSubmit").dataset.id
+        fetch(`/routes/${id}`, {
+            method: 'DELETE',
+            headers: {
+            'X-CSRF-Token': csrfToken,
+            'Content-Type': 'application/json'
+            }
+        })
+        .then(() => window.location.reload())
     }
 </script>
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>

@@ -1,4 +1,6 @@
-<p style="color: green"><%= notice %></p>
+<% unless notice.nil? %>
+    <div class="alert alert-success" role="alert"><%= notice %></div>
+<% end %>
 
 <div class="flex">
     <h1 class="myheader"><%= @route.name %></h1>
@@ -36,8 +38,8 @@
                   <td><%= effort.time %></td>
                   <td>
                       <div class="flex2">
-                        <button class="btn btn-warning mybtn white" data-bs-toggle="modal" data-bs-target="#new-effort-modal" onclick="fillModal(this, 0, '<%= effort._id %>')"><i class="fas fa-edit"></i></button>
-                        <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-modal" onclick="fillDeleteModal(this, '<%= effort._id %>', '<%= route._id %>')"><i class="fas fa-trash-alt"></i></button>
+                        <button class="btn btn-warning mybtn white" data-bs-toggle="modal" data-bs-target="#new-effort-modal" onclick="fillModal(this, 0, '<%= effort.id %>')"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-modal" onclick="fillDeleteModal(this, '<%= effort.id %>', '<%= @route.id %>')"><i class="fas fa-trash-alt"></i></button>
                       </div>
                   </td>
                 </tr>
@@ -66,8 +68,8 @@
                   <td><%= effort.time %></td>
                   <td>
                       <div class="flex2">
-                        <button class="btn btn-warning mybtn white" data-bs-toggle="modal" data-bs-target="#new-effort-modal" onclick="fillModal(this, 0, '<%= effort._id %>')"><i class="fas fa-edit"></i></button>
-                        <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-modal" onclick="fillDeleteModal(this, '<%= effort._id %>', '<%= route._id %>')"><i class="fas fa-trash-alt"></i></button>
+                        <button class="btn btn-warning mybtn white" data-bs-toggle="modal" data-bs-target="#new-effort-modal" onclick="fillModal(this, 1, '<%= effort.id %>')"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-modal" onclick="fillDeleteModal(this, '<%= effort.id %>', '<%= @route.id %>')"><i class="fas fa-trash-alt"></i></button>
                       </div>
                   </td>
                 </tr>
@@ -96,8 +98,8 @@
                   <td><%= effort.time %></td>
                   <td>
                       <div class="flex2">
-                        <button class="btn btn-warning mybtn white" data-bs-toggle="modal" data-bs-target="#new-effort-modal" onclick="fillModal(this, 0, '<%= effort._id %>')"><i class="fas fa-edit"></i></button>
-                        <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-modal" onclick="fillDeleteModal(this, '<%= effort._id %>', '<%= route._id %>')"><i class="fas fa-trash-alt"></i></button>
+                        <button class="btn btn-warning mybtn white" data-bs-toggle="modal" data-bs-target="#new-effort-modal" onclick="fillModal(this, 2, '<%= effort.id %>')"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-modal" onclick="fillDeleteModal(this, '<%= effort.id %>', '<%= @route.id %>')"><i class="fas fa-trash-alt"></i></button>
                       </div>
                   </td>
                 </tr>
@@ -145,6 +147,23 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="delete-modal" tabindex="-1" role="dialog" aria-labelledby="delete-modalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-title">Teljesítés törlése</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Mégse</button>
+                <button type="button" data-id="" onclick="deleteRoute()" id="deleteSubmit" class="btn btn-danger">Törlés</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 
 <script>
 function clearModal() {
@@ -169,14 +188,26 @@ function fillModal(el, mode, id) {
     document.getElementById('newEditSubmit').dataset.id = id;
 }
 
-function fillDeleteModal(el, effort_id, route_id) {
+function fillDeleteModal(el, id) {
     const bodyPrefix = "Biztosan törlöd ezt a teljesítést? "
     const bodyPostfix = " Ezt később nem tudod visszavonni!"
     const name = el.parentElement.parentElement.previousElementSibling.previousElementSibling.innerHTML;
     const time = el.parentElement.parentElement.previousElementSibling.innerHTML;
-    document.getElementById('modal-title').innerHTML = "Teljesítés törlése";
     document.getElementById('modal-body').innerHTML = bodyPrefix + ` ${name}, ${time}` + bodyPostfix;
-    document.getElementById('deleteSubmit').setAttribute('href', '/routes/' + route_id + '/del-effort/' + effort_id);
+    document.getElementById("deleteSubmit").dataset.id = id
+}
+
+function deleteRoute() {
+    const csrfToken = document.querySelector("[name='csrf-token']").content
+    const id = document.getElementById("deleteSubmit").dataset.id
+    fetch(`/efforts/${id}`, {
+        method: 'DELETE',
+        headers: {
+        'X-CSRF-Token': csrfToken,
+        'Content-Type': 'application/json'
+        }
+    })
+    .then(() => window.location.reload())
 }
 
 function onNewEditSubmit(route_id) {
@@ -197,7 +228,7 @@ function onNewEditSubmit(route_id) {
     })
     .then(resp => resp.json())
     .then(data => {
-        if (data.errors.length !== 0) {
+        if (data.errors && data.errors.length !== 0) {
             addErrors(data.errors)
         } else {
             window.location.reload()
@@ -214,7 +245,7 @@ function onNewEditSubmit(route_id) {
     })
     .then(resp => resp.json())
     .then(data => {
-        if (data.errors.length !== 0) {
+        if (data.errors && data.errors.length !== 0) {
             addErrors(data.errors)
         } else {
             window.location.reload()
