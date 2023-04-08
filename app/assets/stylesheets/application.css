@@ -24,7 +24,7 @@
 }
 
 #mynavcont {
-    justify-content: flex-start;
+    justify-content: "space-between";
 }
 .flex {
     display: flex;

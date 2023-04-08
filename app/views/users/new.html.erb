@@ -1,0 +1,22 @@
+<%= form_with model: @user, url: 'new' do |form| %>
+  <% if @user.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2>
+
+      <ul>
+        <% @user.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="mb-3">
+    <%= form.label :username, "Felhasználónév", class: "form-label" %>
+    <%= form.text_field :username, required: true, class: "form-control", placeholder: "Felhasználónév..." %>
+  </div>
+  <div class="mb-3">
+    <%= form.label :password, "Jelszó", class: "form-label" %>
+    <%= form.password_field :password, required: true, class: "form-control", placeholder: "Jelszó..." %>
+  </div>
+  <%= form.submit "Regisztráció", class: "btn btn-success mybtn" %>
+<% end %>

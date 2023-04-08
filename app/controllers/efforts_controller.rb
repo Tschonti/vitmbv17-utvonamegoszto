@@ -10,6 +10,8 @@ class EffortsController < ApplicationController
   def show
   end
 
+  def showMine
+  end
   # GET /efforts/new
   def new
     @effort = Effort.new
@@ -21,7 +23,7 @@ class EffortsController < ApplicationController
 
   # POST /efforts or /efforts.json
   def create
-    @effort = Effort.new(effort_params)
+    @effort = Effort.new(effort_params.merge(user_id: Current.user.id))
 
     respond_to do |format|
       if @effort.save
@@ -60,6 +62,6 @@ class EffortsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def effort_params
-      params.require(:effort).permit(:name, :time, :effort_type, :route_id)
+      params.require(:effort).permit(:time, :effort_type, :route_id)
     end
 end

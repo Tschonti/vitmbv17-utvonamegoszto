@@ -10,15 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_07_181323) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_08_200928) do
   create_table "efforts", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
-    t.string "name"
     t.string "time"
     t.integer "effort_type"
     t.bigint "route_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "user_id"
     t.index ["route_id"], name: "index_efforts_on_route_id"
+    t.index ["user_id"], name: "fk_rails_3924c645c9"
   end
 
   create_table "routes", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
@@ -30,5 +31,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_07_181323) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "users", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+    t.string "username"
+    t.string "password_digest"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   add_foreign_key "efforts", "routes"
+  add_foreign_key "efforts", "users"
 end

@@ -17,11 +17,34 @@
   <body>
   <nav class="navbar navbar-expand-lg navbar-light bg-light mynav">
         <div id="mynavcont" class="container-fluid">
-            <%= link_to "Útvonalmegosztó", root_path, class: "navbar-brand" %>
             <ul class="navbar-nav">
-                <li class="nav-item">
-                  <%= link_to "Új útvonal", new_route_path, class: "nav-link" %>
+                <%= link_to "Útvonalmegosztó", root_path, class: "navbar-brand" %>
+                <% if user_signed_in? %>
+                  <li class="nav-item">
+                    <%= link_to "Új útvonal", new_route_path, class: "nav-link" %>
+                  </li>
+                  <li class="nav-item">
+                    <%= link_to "Teljesítéseim", "myefforts", class: "nav-link" %>
+                  </li>
+                <% end %>
+
+            </ul>
+            <ul class="navbar-nav">
+              <% if user_signed_in? %>
+                <li class="nav-item nav-link">
+                  Bejelentkezve <%= Current.user.username%>-ként
                 </li>
+                <li class="nav-item">
+                  <%= link_to "Kijelentkezés", '/logout', class: "nav-link" %>
+                </li>
+              <% else %>
+                <li class="nav-item">
+                <%= link_to "Bejelentkezés", '/login', class: "nav-link" %>
+                </li>
+                <li class="nav-item">
+                  <%= link_to "Regisztráció", '/users/new', class: "nav-link" %>
+                </li>
+              <% end %>
             </ul>
         </div>
     </nav>

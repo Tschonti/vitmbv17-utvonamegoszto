@@ -26,7 +26,7 @@
           <table class="table table-striped align-middle">
               <thead>
                   <th><i class="fas fa-medal"></i></th>
-                  <th>Név</th>
+                  <th>Felhasználónév</th>
                   <th>Idő</th>
                   <th>Módosítás</th>
               </thead>
@@ -34,7 +34,7 @@
               <% @hike_efforts.each_with_index do |effort, idx| %>
                 <tr>
                   <td><%= idx + 1%>.</td>
-                  <td><%= effort.name %></td>
+                  <td><%= effort.user.username %></td>
                   <td><%= effort.time %></td>
                   <td>
                       <div class="flex2">
@@ -56,7 +56,7 @@
           <table class="table table-striped align-middle">
               <thead>
                   <th><i class="fas fa-medal"></i></th>
-                  <th>Név</th>
+                  <th>Felhasználónév</th>
                   <th>Idő</th>
                   <th>Módosítás</th>
               </thead>
@@ -64,7 +64,7 @@
               <% @run_efforts.each_with_index do |effort, idx| %>
                 <tr>
                   <td><%= idx + 1%>.</td>
-                  <td><%= effort.name %></td>
+                  <td><%= effort.user.username %></td>
                   <td><%= effort.time %></td>
                   <td>
                       <div class="flex2">
@@ -86,7 +86,7 @@
           <table class="table table-striped align-middle">
               <thead>
                   <th><i class="fas fa-medal"></i></th>
-                  <th>Név</th>
+                  <th>Felhasználónév</th>
                   <th>Idő</th>
                   <th>Módosítás</th>
               </thead>
@@ -94,7 +94,7 @@
               <% @bike_efforts.each_with_index do |effort, idx| %>
                 <tr>
                   <td><%= idx + 1%>.</td>
-                  <td><%= effort.name %></td>
+                  <td><%= effort.user.username %></td>
                   <td><%= effort.time %></td>
                   <td>
                       <div class="flex2">
@@ -121,10 +121,6 @@
             </div>
             <div class="modal-body">
                 <form id="new-effort-form">
-                    <div class="mb-3">
-                        <label for="name" class="form-label">Teljesítő neve</label>
-                        <input class="form-control" id="name" name="name" placeholder="Név...">
-                    </div>
                     <div class="mb-3">
                         <label for="time" class="form-label">Teljesítés ideje (óó:pp:mm)</label>
                         <input class="form-control" id="time" name="time" placeholder="Idő...">
@@ -167,7 +163,6 @@
 
 <script>
 function clearModal() {
-    document.getElementById('name').value = '';
     document.getElementById('time').value = '';
     document.getElementById('type').selectedIndex = 0   ;
     document.getElementById('titlePartOne').innerHTML = 'Új teljesítés';
@@ -179,11 +174,9 @@ function clearModal() {
 function fillModal(el, mode, id) {
     document.getElementById("errors").innerHTML = '';
     document.getElementById("errors").setAttribute('hidden', true)
-    const name = el.parentElement.parentElement.previousElementSibling.previousElementSibling.innerHTML;
     const time = el.parentElement.parentElement.previousElementSibling.innerHTML;
     document.getElementById('titlePartOne').innerHTML = 'Teljesítés szerkesztése';
     document.getElementById('time').value = time;
-    document.getElementById('name').value = name;
     document.getElementById('type').selectedIndex = mode + 1;
     document.getElementById('newEditSubmit').dataset.id = id;
 }
@@ -213,10 +206,9 @@ function deleteRoute() {
 function onNewEditSubmit(route_id) {
   const csrfToken = document.querySelector("[name='csrf-token']").content
   const id = document.getElementById('newEditSubmit').dataset.id;
-  const name = document.getElementById('name').value
   const time = document.getElementById('time').value
   const type = document.getElementById('type').value
-  const formData = JSON.stringify({ name, time, effort_type: parseInt(type), route_id: parseInt(route_id) })
+  const formData = JSON.stringify({time, effort_type: parseInt(type), route_id: parseInt(route_id) })
   if (id) {
     fetch(`/efforts/${id}`, {
         method: 'PUT',
