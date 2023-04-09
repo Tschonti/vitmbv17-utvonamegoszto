@@ -37,10 +37,12 @@
                   <td><%= effort.user.username %></td>
                   <td><%= effort.time %></td>
                   <td>
+                    <% if effort.user.id == Current.user.id %>
                       <div class="flex2">
                         <button class="btn btn-warning mybtn white" data-bs-toggle="modal" data-bs-target="#new-effort-modal" onclick="fillModal(this, 0, '<%= effort.id %>')"><i class="fas fa-edit"></i></button>
                         <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-modal" onclick="fillDeleteModal(this, '<%= effort.id %>', '<%= @route.id %>')"><i class="fas fa-trash-alt"></i></button>
                       </div>
+                    <% end %>
                   </td>
                 </tr>
               <% end %>
@@ -67,10 +69,12 @@
                   <td><%= effort.user.username %></td>
                   <td><%= effort.time %></td>
                   <td>
+                    <% if effort.user.id == Current.user.id %>
                       <div class="flex2">
                         <button class="btn btn-warning mybtn white" data-bs-toggle="modal" data-bs-target="#new-effort-modal" onclick="fillModal(this, 1, '<%= effort.id %>')"><i class="fas fa-edit"></i></button>
                         <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-modal" onclick="fillDeleteModal(this, '<%= effort.id %>', '<%= @route.id %>')"><i class="fas fa-trash-alt"></i></button>
                       </div>
+                    <% end %>
                   </td>
                 </tr>
               <% end %>
@@ -97,10 +101,12 @@
                   <td><%= effort.user.username %></td>
                   <td><%= effort.time %></td>
                   <td>
+                    <% if effort.user.id == Current.user.id %>
                       <div class="flex2">
                         <button class="btn btn-warning mybtn white" data-bs-toggle="modal" data-bs-target="#new-effort-modal" onclick="fillModal(this, 2, '<%= effort.id %>')"><i class="fas fa-edit"></i></button>
                         <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-modal" onclick="fillDeleteModal(this, '<%= effort.id %>', '<%= @route.id %>')"><i class="fas fa-trash-alt"></i></button>
                       </div>
+                    <% end %>
                   </td>
                 </tr>
               <% end %>

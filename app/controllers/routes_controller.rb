@@ -8,18 +8,28 @@ class RoutesController < ApplicationController
 
   # GET /routes/1 or /routes/1.json
   def show
+    unless user_signed_in?
+      redirect_to root_path,{ notice: "Nem vagy bejelentkezve!"} and return
+    end
     @hike_efforts = @route.efforts.filter {|effort| effort.effort_type == 1}
     @run_efforts = @route.efforts.filter {|effort| effort.effort_type == 2}
     @bike_efforts = @route.efforts.filter {|effort| effort.effort_type == 3}
+
   end
 
   # GET /routes/new
   def new
+    unless user_signed_in?
+      redirect_to root_path,{ notice: "Nem vagy bejelentkezve!"} and return
+    end
     @route = Route.new
   end
 
   # GET /routes/1/edit
   def edit
+    unless user_signed_in?
+      redirect_to root_path,{ notice: "Nem vagy bejelentkezve!"} and return
+    end
   end
 
   # POST /routes or /routes.json

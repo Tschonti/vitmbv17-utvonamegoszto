@@ -6,6 +6,6 @@
     <td class="middle-buttons">
         <%= link_to ('<i class="fas fa-medal"></i>').html_safe, route, class: "btn btn-success mybtn" %>
         <%= link_to ('<i class="fas fa-edit"></i>').html_safe, edit_route_url(route), class: "btn btn-warning mybtn white" %>
-        <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-modal" onclick="fillDeleteModal(this, '<%= route.id %>')"><i class="fas fa-trash-alt"></i></button>
+        <button class="btn btn-danger" <%= user_signed_in? ? "" : "disabled" %> data-bs-toggle="modal" data-bs-target="#delete-modal" onclick="fillDeleteModal(this, '<%= route.id %>')"><i class="fas fa-trash-alt"></i></button>
     </td>
 </tr>
