@@ -1,0 +1,11 @@
+<tr>
+    <td><%= link_to effort.route.name, effort.route, class: "btn btn-link mylink" %></td>
+    <td><%= effort.route.distance %></td>
+    <td><%= effort.route.elevation %></td>
+    <td><% case effort.effort_type
+        when 1 %><%= "Túra" %>
+        <% when 2 %><%= "Futás" %>
+        <% when 3 %><%= "Kerékpár" %>
+    <%end%></td>
+    <td><%= effort.time %></td>
+</tr>

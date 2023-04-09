@@ -120,12 +120,12 @@
 <div class="modal fade" id="new-effort-modal" tabindex="-1" role="dialog" aria-labelledby="new-effort-modalTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
-            <div class="alert alert-danger" hidden role="alert" id="errors"></div>
             <div class="modal-header">
                 <h5 class="modal-title" id="modalTitle"><span id="titlePartOne">Új teljesítés</span> - <%= @route.name %></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
+                <div class="alert alert-danger" hidden role="alert" id="errors"></div>
                 <form id="new-effort-form">
                     <div class="mb-3">
                         <label for="time" class="form-label">Teljesítés ideje (óó:pp:mm)</label>

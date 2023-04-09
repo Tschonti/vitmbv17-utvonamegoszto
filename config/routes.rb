@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   resources :routes
   get 'users/new', to: 'users#new'
   post 'users/new', to: 'users#create'
-  get 'myefforts', to: 'efforts#showMine'
+  get 'myefforts', to: 'efforts#mine'
   get 'login', to: 'sessions#new'
   post 'login', to: 'sessions#create'
   get 'logout', to: 'sessions#destroy'

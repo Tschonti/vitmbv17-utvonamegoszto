@@ -10,8 +10,10 @@ class EffortsController < ApplicationController
   def show
   end
 
-  def showMine
+  def mine
+    @efforts = Effort.where(user_id: Current.user.id)
   end
+
   # GET /efforts/new
   def new
     @effort = Effort.new

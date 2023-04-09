@@ -1,0 +1,25 @@
+<div class="flex">
+    <h1 class="myheader">Teljesítéseim</h1>
+</div>
+
+ <table
+    class="table table-hover align-middle"
+    id="table"
+    data-toggle="table">
+    <thead>
+        <th class="col-sm-4" data-sortable="true">Útvonal</th>
+        <th class="col-2" data-sortable="true">Hossz (km)</th>
+        <th class="col-2" data-sortable="true">Szintemelkedés (m)</th>
+        <th class="col-2" data-sortable="true">Teljesítés módja</th>
+        <th class="col-2" data-sortable="true">Teljesítés ideje</th>
+    </thead>
+    <tbody>
+      <% @efforts.each do |effort| %>
+        <%= render effort %>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/bootstrap-table@1.18.3/dist/bootstrap-table.min.js"></script>
