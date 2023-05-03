@@ -1,13 +1,19 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  name: MyString
-  time: MyString
-  type: 1
+  time: 00:04:13
+  effort_type: 2
   route: one
+  user: one
 
 two:
-  name: MyString
-  time: MyString
-  type: 1
+  time: 00:04:14
+  effort_type: 2
+  route: one
+  user: two
+
+three:
+  time: 00:25:14
+  effort_type: 3
   route: two
+  user: two
