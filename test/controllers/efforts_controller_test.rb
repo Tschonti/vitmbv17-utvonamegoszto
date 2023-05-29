@@ -5,37 +5,25 @@ class EffortsControllerTest < ActionDispatch::IntegrationTest
     @effort = efforts(:one)
   end
 
-  test "should get index" do
-    get efforts_url
-    assert_response :success
-  end
-
-  test "should get new" do
-    get new_effort_url
-    assert_response :success
-  end
-
   test "should create effort" do
     assert_difference("Effort.count") do
       post efforts_url, params: { effort: { name: @effort.name, route_id: @effort.route_id, time: @effort.time, type: @effort.type } }
     end
 
-    assert_redirected_to effort_url(Effort.last)
+    assert_response :created
   end
 
-  test "should show effort" do
-    get effort_url(@effort)
-    assert_response :success
-  end
+  test "should throw error with bad effort" do
+    assert_no_difference("Effort.count") do
+      post efforts_url, params: { effort: { name: @effort.name, route_id: @effort.route_id, time: 'xxx', type: @effort.type } }
+    end
 
-  test "should get edit" do
-    get edit_effort_url(@effort)
-    assert_response :success
+    assert_response :bad_request
   end
 
   test "should update effort" do
     patch effort_url(@effort), params: { effort: { name: @effort.name, route_id: @effort.route_id, time: @effort.time, type: @effort.type } }
-    assert_redirected_to effort_url(@effort)
+    assert_response :success
   end
 
   test "should destroy effort" do
@@ -43,6 +31,6 @@ class EffortsControllerTest < ActionDispatch::IntegrationTest
       delete effort_url(@effort)
     end
 
-    assert_redirected_to efforts_url
+    assert_response :success
   end
 end

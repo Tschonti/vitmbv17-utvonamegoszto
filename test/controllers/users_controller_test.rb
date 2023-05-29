@@ -15,7 +15,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
 
   test "try to register user with invalid data" do
     post url_for(controller: 'users', action: 'create'), params: {
-      username: users(:test1).username, password: 'test1234'} # username already exists
+      username: users(:one).username, password: 'test1234'} # username already exists
     assert_response :unprocessable_entity
   end
 end
