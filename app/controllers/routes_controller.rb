@@ -1,5 +1,7 @@
 class RoutesController < ApplicationController
+  skip_before_action :verify_authenticity_token
   before_action :set_route, only: %i[ show edit update destroy ]
+
 
   # GET /routes or /routes.json
   def index

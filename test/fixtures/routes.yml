@@ -11,3 +11,9 @@ two:
   link: https://example.org
   distance: 7.8
   elevation: 462
+
+three:
+  name: Ezt még senki se teljesítette
+  link: https://example.org
+  distance: 700.8
+  elevation: 46211

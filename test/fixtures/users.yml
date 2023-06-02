@@ -2,8 +2,8 @@
 
 one:
   username: test1
-  password_digest: <%= Digest::SHA1.hexdigest 'test1' %>
+  password_digest: <%= BCrypt::Password.create('test123') %>
 
 two:
   username: test2
-  password_digest: <%= Digest::SHA1.hexdigest 'test2' %>
+  password_digest: <%= BCrypt::Password.create('test2') %>

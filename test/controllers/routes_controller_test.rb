@@ -3,6 +3,7 @@ require "test_helper"
 class RoutesControllerTest < ActionDispatch::IntegrationTest
   setup do
     @route = routes(:one)
+    @third_route = routes(:three)
   end
 
   test "should create route" do
@@ -20,17 +21,17 @@ class RoutesControllerTest < ActionDispatch::IntegrationTest
 
   test "should get show_route if authorized" do
     post url_for(controller: 'sessions', action: 'create'), params: {
-      username: users(:test1).username, password: 'test1'}
+      user: {username: users(:one).username, password: 'test123'}}
     assert_response :redirect
     follow_redirect!
-    assert_equal Current.user.id, users(:test1).id
+    assert_equal session[:current_user_id], users(:one).id
     get route_url(@route)
     assert_response :success
   end
 
   test "should get edit" do
     get edit_route_url(@route)
-    assert_response :success
+    assert_response :redirect
   end
 
   test "should update route" do
@@ -40,9 +41,9 @@ class RoutesControllerTest < ActionDispatch::IntegrationTest
 
   test "should destroy route" do
     assert_difference("Route.count", -1) do
-      delete route_url(@route)
+      delete "#{route_url(@third_route)}.json"
     end
 
-    assert_redirected_to routes_url
+    assert_response :no_content
   end
 end
